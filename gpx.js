@@ -79,6 +79,7 @@ L.GPX = L.FeatureGroup.extend({
     // Base icon class for track pins.
     L.GPXTrackIcon = L.Icon.extend({ options: options.marker_options });
 
+    this._tracks = [];
     this._gpx = gpx;
     this._layers = {};
     this._info = {
@@ -225,9 +226,13 @@ L.GPX = L.FeatureGroup.extend({
   _parse: function(input, options, async) {
     var _this = this;
     var cb = function(gpx, options) {
+      //_this._tracks = _this._parse_gpx_data(gpx, options);
+      //if (!_this._tracks) return;
+      //_this.addLayer(_this._tracks);
       var layers = _this._parse_gpx_data(gpx, options);
       if (!layers) return;
       _this.addLayer(layers);
+
       _this.fire('loaded');
     }
     if (input.substr(0,1)==='<') { // direct XML has to start with a <
@@ -351,6 +356,7 @@ L.GPX = L.FeatureGroup.extend({
         }
     }
 
+    this._tracks = layers;
     if (!layers.length) return;
     var layer = layers[0];
     if (layers.length > 1)
